@@ -1,4 +1,4 @@
-URL Shortener - Short.link
+# URL Shortener - Short.link
 
 A sleek URL shortening service that transforms long web addresses into elegant, bite-sized aliases. Short links are easy to copy, share, and type, and they reduce the risk of user typos.
 
@@ -53,30 +53,33 @@ A sleek URL shortening service that transforms long web addresses into elegant, 
 
 ## Deployment
 
-### Using Docker Compose
+To run the application using Docker Compose, follow these steps:
 
-Pull the backend image from Docker Hub:
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Ylli-Berisha/UrlShortener.git
+cd urlShortener
+```
+
+### 2. Pull the Backend Image from Docker Hub
 
 ```bash
 docker pull ylliberisha/urlshortener:latest
 ```
 
-Start the app and the database in one command:
+### 3. Start the Application and Database
 
 ```bash
 docker compose up -d
 ```
 
-The backend will be available at:
+* This command will start both the backend service and the PostgreSQL database automatically.
+* The backend will be accessible at: `http://localhost:8080`
 
-```
-http://localhost:8080
-```
-
-**Notes:**
+### Notes
 
 * QR codes fetch the current short link dynamically from the backend.
 * Links are stored in PostgreSQL and tracked for clicks.
-* Docker Compose sets up both the backend and PostgreSQL automatically.
-* To use QR code linking from other devices, navigate to `http://<your-ip-address>:8080` instead of localhost.
+* Make sure your device can access the backend if scanning QR codes from another device. Use your machine’s IP address in the URL if needed.
 
