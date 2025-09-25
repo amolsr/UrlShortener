@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: urlShortener
+
+  datasource:
+    url: jdbc:postgresql://localhost:5434/urlshortener
+    username: urluser
+    password: urlpass
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: update   # create/update tables automatically
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8080

@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres
+    container_name: urlshortener-db
+    environment:
+      POSTGRES_USER: urluser
+      POSTGRES_PASSWORD: urlpass
+      POSTGRES_DB: urlshortener
+    ports:
+      - "5434:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - urlshortener-network
+
+  app:
+    image: ylliberisha/urlshortener:latest
+    container_name: urlshortener-app
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/urlshortener
+      SPRING_DATASOURCE_USERNAME: urluser
+      SPRING_DATASOURCE_PASSWORD: urlpass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+    networks:
+      - urlshortener-network
+
+volumes:
+  db-data:
+
+networks:
+  urlshortener-network:
