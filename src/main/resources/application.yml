@@ -2,16 +2,6 @@ spring:
   cache:
     type: redis
 
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: "*"
-        base-path: /actuator
-    endpoint:
-      health:
-        show-details: always
-
   application:
     name: urlShortener
 
@@ -38,3 +28,15 @@ spring:
 
 server:
   port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /actuator
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always
