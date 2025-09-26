@@ -1,4 +1,4 @@
-# URL Shortener - Short.link
+# URL Shortener
 
 A sleek URL shortening service that transforms long web addresses into elegant, bite-sized aliases. Short links are easy to copy, share, and type, and they reduce the risk of user typos.
 
@@ -7,7 +7,7 @@ A sleek URL shortening service that transforms long web addresses into elegant, 
 1. **Short Link Generation**
 
    * Generate a unique short link for any given URL.
-   * Structure: `https://short.link/{uniqueId}`.
+   * Structure: `https://localhost:8080/{uniqueId}`.
 
 2. **Redirection**
 

@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeController {
     private final LinkService linkService;
-    private static final String BASE_URL = "https://short.link/";
+    private static final String BASE_URL = "https://localhost:8080/";
 
     @GetMapping("/{shortId}")
     public String redirectToOriginal(@PathVariable String shortId) {

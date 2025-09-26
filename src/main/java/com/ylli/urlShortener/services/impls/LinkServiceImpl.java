@@ -18,7 +18,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class LinkServiceImpl implements LinkService {
     private final LinkRepository linkRepository;
-    private static final String BASE_URL = "https://short.link/";
+    private static final String BASE_URL = "https://localhost:8080/";
     private static final int SHORT_ID_LENGTH = 6;
     private static final int DEFAULT_TTL_MINUTES = 300;
 

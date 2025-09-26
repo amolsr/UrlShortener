@@ -17,7 +17,7 @@ public class LinkDto {
 
     @Schema(
             description = "Full shortened link including domain",
-            example = "https://short.link/abc123",
+            example = "https://localhost:8080/abc123",
             required = true
     )
     private String shortLink;
