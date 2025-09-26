@@ -1,4 +1,4 @@
-package com.ylli.urlShortener.models;
+package com.urlShortener.models;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,8 +1,10 @@
-package com.ylli.urlShortener.repositories;
+package com.urlShortener.repositories;
 
-import com.ylli.urlShortener.models.Link;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.urlShortener.models.Link;
+
 import java.util.Optional;
 
 @Repository

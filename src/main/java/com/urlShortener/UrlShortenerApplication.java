@@ -1,4 +1,4 @@
-package com.ylli.urlShortener;
+package com.urlShortener;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.ylli.urlShortener.dtos;
+package com.urlShortener.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ public class LinkDto {
 
     @Schema(
             description = "Full shortened link including domain",
-            example = "https://localhost:8080/abc123",
+            example = "http://localhost:8080/abc123",
             required = true
     )
     private String shortLink;

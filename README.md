@@ -7,7 +7,7 @@ A sleek URL shortening service that transforms long web addresses into elegant, 
 1. **Short Link Generation**
 
    * Generate a unique short link for any given URL.
-   * Structure: `https://localhost:8080/{uniqueId}`.
+   * Structure: `http://localhost:8080/{uniqueId}`.
 
 2. **Redirection**
 
@@ -22,7 +22,7 @@ A sleek URL shortening service that transforms long web addresses into elegant, 
 
    * Users can delete short links.
 
-5. **Click Tracking**
+5. TODO: **Click Tracking**
 
    * Each short link tracks and displays the number of clicks.
    * Click count is displayed under each link:
@@ -44,7 +44,7 @@ A sleek URL shortening service that transforms long web addresses into elegant, 
 ## Technology Stack
 
 * **Backend**: Java 21, Spring Boot 3.5
-* **Database**: PostgreSQL (containerized with Docker)
+* **Database**: PostgreSQL, Redis (containerized with Docker)
 * **Frontend**: HTML, CSS, JavaScript
 * **QR Code**: ZXing library
 * **Containerization**: Docker & Docker Compose
@@ -58,14 +58,8 @@ To run the application using Docker Compose, follow these steps:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Ylli-Berisha/UrlShortener.git
+git clone https://github.com/amolsr/UrlShortener.git
 cd urlShortener
-```
-
-### 2. Pull the Backend Image from Docker Hub
-
-```bash
-docker pull ylliberisha/urlshortener:latest
 ```
 
 ### 3. Start the Application and Database

@@ -1,12 +1,17 @@
-package com.ylli.urlShortener.services.impls;
+package com.urlShortener.services.impls;
 
-import com.ylli.urlShortener.dtos.LinkDto;
-import com.ylli.urlShortener.models.Link;
-import com.ylli.urlShortener.repositories.LinkRepository;
-import com.ylli.urlShortener.services.LinkService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.urlShortener.dtos.LinkDto;
+import com.urlShortener.models.Link;
+import com.urlShortener.repositories.LinkRepository;
+import com.urlShortener.services.LinkService;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -18,7 +23,8 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class LinkServiceImpl implements LinkService {
     private final LinkRepository linkRepository;
-    private static final String BASE_URL = "https://localhost:8080/";
+    private final RedisTemplate<String, String> redisTemplate;
+    private static final String BASE_URL = "http://localhost:8080/";
     private static final int SHORT_ID_LENGTH = 6;
     private static final int DEFAULT_TTL_MINUTES = 300;
 
@@ -48,7 +54,16 @@ public class LinkServiceImpl implements LinkService {
 
         linkRepository.save(link);
 
+        cacheShortenedLink(shortId, originalUrl, ttl);
+
         return BASE_URL + shortId;
+    }
+
+    @Override
+    public void cacheShortenedLink(String shortId, String originalUrl, Duration ttl) {
+        String cacheKey = "links::originalUrl:shortId:" + shortId;
+        ttl = ttl != null ? ttl : Duration.ofMinutes(30);
+        redisTemplate.opsForValue().set(cacheKey, "\""+ originalUrl +"\"", ttl);
     }
 
     @Override
@@ -67,6 +82,7 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "links", key = "'originalUrl:shortId:' + #shortId")
     public boolean deleteLink(String shortId) {
         return linkRepository.findByShortId(shortId)
                 .map(link -> {
@@ -97,8 +113,14 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
+    @Cacheable(value = "links", key = "'originalUrl:shortId:' + #shortId")
+    public Optional<String> getOriginalUrlByShortId(String shortId) {
+        return linkRepository.findByShortId(shortId).map(Link::getOriginalUrl);
+    }
+
+    @Override
     @Transactional
-        public void incrementClickCount(Link link) {
+    public void incrementClickCount(Link link) {
         link.setClickCount(link.getClickCount() + 1);
         linkRepository.save(link);
     }

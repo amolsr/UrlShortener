@@ -1,12 +1,13 @@
-package com.ylli.urlShortener.controllers;
+package com.urlShortener.controllers;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.ylli.urlShortener.dtos.LinkDto;
-import com.ylli.urlShortener.services.LinkService;
+import com.urlShortener.dtos.LinkDto;
+import com.urlShortener.services.LinkService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

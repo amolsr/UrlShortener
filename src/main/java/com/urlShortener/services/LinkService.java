@@ -1,11 +1,11 @@
-package com.ylli.urlShortener.services;
-
-import com.ylli.urlShortener.dtos.LinkDto;
-import com.ylli.urlShortener.models.Link;
+package com.urlShortener.services;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
+
+import com.urlShortener.dtos.LinkDto;
+import com.urlShortener.models.Link;
 
 public interface LinkService {
     String shortenLink(String url, Duration ttl);
@@ -18,6 +18,9 @@ public interface LinkService {
 
     Optional<Link> getLinkByShortId(String shortId);
 
+    Optional<String> getOriginalUrlByShortId(String shortId);
+
     void incrementClickCount(Link link);
 
+    void cacheShortenedLink(String shortId, String originalUrl, Duration ttl);
 }

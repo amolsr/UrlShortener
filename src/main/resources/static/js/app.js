@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                 const shortUrl = await response.text();
                 const shortId = shortUrl.split('/').pop();
-                resultDiv.innerHTML = `<p>Shortened URL: <a href="/${shortId}" target="_blank">https://localhost:8080/${shortId}</a></p>`;
+                resultDiv.innerHTML = `<p>Shortened URL: <a href="/${shortId}" target="_blank">http://localhost:8080/${shortId}</a></p>`;
                 shortenForm.reset();
                 await loadLinks();
             } else {

@@ -1,8 +1,5 @@
-package com.ylli.urlShortener.controllers;
+package com.urlShortener.controllers;
 
-import com.ylli.urlShortener.dtos.LinkDto;
-import com.ylli.urlShortener.models.Link;
-import com.ylli.urlShortener.services.LinkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -11,6 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.urlShortener.dtos.LinkDto;
+import com.urlShortener.models.Link;
+import com.urlShortener.services.LinkService;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,21 +19,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeController {
     private final LinkService linkService;
-    private static final String BASE_URL = "https://localhost:8080/";
+    private static final String BASE_URL = "http://localhost:8080/";
 
     @GetMapping("/{shortId}")
     public String redirectToOriginal(@PathVariable String shortId) {
-        Link link = linkService.getLinkByShortId(shortId)
+        String originalUrl = linkService.getOriginalUrlByShortId(shortId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Link not found"));
 
-        if (link.getExpiresAt() != null && link.getExpiresAt().isBefore(LocalDateTime.now())) {
-            linkService.deleteLink(shortId);
-            return "notFound";
-        }
+        // TODO: increment click count 
+        // linkService.incrementClickCount(link);
 
-        linkService.incrementClickCount(link);
-
-        return "redirect:" + link.getOriginalUrl();
+        return "redirect:" + originalUrl;
     }
 
     @GetMapping("/")
