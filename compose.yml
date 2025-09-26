@@ -22,7 +22,9 @@ services:
       - urlshortener-network
 
   app:
-    image: ylliberisha/urlshortener:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: urlshortener-app
     depends_on:
       - db
