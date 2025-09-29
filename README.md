@@ -22,13 +22,14 @@ A sleek URL shortening service that transforms long web addresses into elegant, 
 
    * Users can delete short links.
 
-5. TODO: **Click Tracking**
+5. **Click Tracking** ✅
 
-   * Each short link tracks and displays the number of clicks.
-   * Click count is displayed under each link:
-     This link has been clicked 3 times.
-
-     * Styled at 14px font size with `#9bb7f4` color.
+   * Each short link tracks and displays the number of clicks in real-time.
+   * Click count is displayed under each link: "This link has been clicked X times."
+   * Styled at 14px font size with `#9bb7f4` color.
+   * **Performance Optimized**: Asynchronous click tracking for better performance.
+   * **Race Condition Safe**: Uses atomic database operations to prevent data corruption.
+   * **User Experience**: Optimistic UI updates provide immediate feedback.
 
 6. **QR Code Generation**
 
