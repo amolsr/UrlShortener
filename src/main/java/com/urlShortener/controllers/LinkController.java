@@ -5,6 +5,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.urlShortener.config.AppConfig;
 import com.urlShortener.dtos.LinkDto;
 import com.urlShortener.services.LinkService;
 
@@ -13,7 +14,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +32,7 @@ import java.util.List;
 public class LinkController {
 
     private final LinkService linkService;
+    private final AppConfig appConfig;
 
     @Operation(
             summary = "Shorten a URL",
@@ -136,11 +137,9 @@ public class LinkController {
 
     @GetMapping("/qr/{shortId}")
     public ResponseEntity<byte[]> generateQr(
-            @PathVariable String shortId,
-            HttpServletRequest request
+            @PathVariable String shortId
     ) throws WriterException, IOException {
-        String baseUrl = request.getScheme() + "://" + request.getHeader("Host");
-        String shortUrl = baseUrl + "/" + shortId;
+        String shortUrl = appConfig.getBaseUrl() + shortId;
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         QRCodeWriter qrCodeWriter = new QRCodeWriter();

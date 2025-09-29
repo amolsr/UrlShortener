@@ -6,10 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const resultDiv = document.getElementById("shortUrlResult");
     const linksContainer = document.getElementById("linksContainer");
     let linkIdToDelete = null;
+    
+    // Get base URL from global variable set by Thymeleaf
+    const baseUrl = window.BASE_URL || 'http://localhost:8080/';
+    const apiBaseUrl = baseUrl.endsWith('/') ? baseUrl + 'api' : baseUrl + '/api';
 
     async function loadLinks() {
         try {
-            const response = await fetch("/api/links");
+            const response = await fetch(`${apiBaseUrl}/links`);
             if (!response.ok) throw new Error("Failed to fetch links");
 
             const links = await response.json();
@@ -21,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const div = document.createElement("div");
 
                 const a = document.createElement("a");
-                a.href = `/` + shortId;
+                a.href = baseUrl + shortId;
                 a.textContent = link.shortLink;
 
                 const deleteSpan = document.createElement("span");
@@ -81,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 qrButton.addEventListener("click", async () => {
                     if (qrImg.style.display === "none") {
                         try {
-                            const qrResponse = await fetch(`/api/links/qr/${shortId}`);
+                            const qrResponse = await fetch(`${apiBaseUrl}/links/qr/${shortId}`);
                             if (qrResponse.ok) {
                                 const blob = await qrResponse.blob();
                                 qrImg.src = URL.createObjectURL(blob);
@@ -113,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 a.addEventListener("click", async (e) => {
                     e.preventDefault();
                     try {
-                        const patchResponse = await fetch(`/api/links/increment-count/${shortId}`, {
+                        const patchResponse = await fetch(`${apiBaseUrl}/links/increment-count/${shortId}`, {
                             method: "PATCH"
                         });
                         if (patchResponse.ok) {
@@ -153,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     confirmDeleteBtn.addEventListener("click", async () => {
         if (linkIdToDelete) {
             try {
-                const response = await fetch(`/api/links/${linkIdToDelete}`, { method: "DELETE" });
+                const response = await fetch(`${apiBaseUrl}/links/${linkIdToDelete}`, { method: "DELETE" });
                 if (response.ok) {
                     loadLinks();
                 } else {
@@ -196,7 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
             params.append("originalUrl", originalUrl);
             if (ttlInMinutes) params.append("ttlInMinutes", ttlInMinutes);
 
-            const response = await fetch("/api/links/shorten", {
+            const response = await fetch(`${apiBaseUrl}/links/shorten`, {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: params.toString()
@@ -205,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                 const shortUrl = await response.text();
                 const shortId = shortUrl.split('/').pop();
-                resultDiv.innerHTML = `<p>Shortened URL: <a href="/${shortId}" target="_blank">http://localhost:8080/${shortId}</a></p>`;
+                resultDiv.innerHTML = `<p>Shortened URL: <a href="${baseUrl}${shortId}" target="_blank">${baseUrl}${shortId}</a></p>`;
                 shortenForm.reset();
                 await loadLinks();
             } else {

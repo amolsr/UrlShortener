@@ -34,6 +34,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: urlpass
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_PROFILES_ACTIVE: docker
+      BASE_URL: http://localhost:8080/
     ports:
       - "8080:8080"
     networks:

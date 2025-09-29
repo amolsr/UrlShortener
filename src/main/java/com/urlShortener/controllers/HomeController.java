@@ -8,18 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.urlShortener.dtos.LinkDto;
-import com.urlShortener.models.Link;
+import com.urlShortener.config.AppConfig;
 import com.urlShortener.services.LinkService;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
     private final LinkService linkService;
-    private static final String BASE_URL = "http://localhost:8080/";
+    private final AppConfig appConfig;
 
     @GetMapping("/{shortId}")
     public String redirectToOriginal(@PathVariable String shortId) {
@@ -34,7 +30,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String homePage(Model model) {
-        model.addAttribute("baseUrl", BASE_URL);
+        model.addAttribute("baseUrl", appConfig.getBaseUrl());
 
         return "index";
     }

@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.urlShortener.config.AppConfig;
 import com.urlShortener.dtos.LinkDto;
 import com.urlShortener.models.Link;
 import com.urlShortener.repositories.LinkRepository;
@@ -24,7 +25,7 @@ import java.util.Random;
 public class LinkServiceImpl implements LinkService {
     private final LinkRepository linkRepository;
     private final RedisTemplate<String, String> redisTemplate;
-    private static final String BASE_URL = "http://localhost:8080/";
+    private final AppConfig appConfig;
     private static final int SHORT_ID_LENGTH = 6;
     private static final int DEFAULT_TTL_MINUTES = 300;
 
@@ -56,7 +57,7 @@ public class LinkServiceImpl implements LinkService {
 
         cacheShortenedLink(shortId, originalUrl, ttl);
 
-        return BASE_URL + shortId;
+        return appConfig.getBaseUrl() + shortId;
     }
 
     @Override
@@ -70,7 +71,7 @@ public class LinkServiceImpl implements LinkService {
     public LinkDto getLinkStatistics(String shortId) {
         return linkRepository.findByShortId(shortId)
                 .map(link -> LinkDto.builder()
-                        .shortLink(BASE_URL + link.getShortId())
+                        .shortLink(appConfig.getBaseUrl() + link.getShortId())
                         .shortId(link.getShortId())
                         .originalUrl(link.getOriginalUrl())
                         .clickCount(link.getClickCount())
@@ -97,7 +98,7 @@ public class LinkServiceImpl implements LinkService {
         return linkRepository.findAll()
                 .stream()
                 .map(link -> LinkDto.builder()
-                        .shortLink(BASE_URL + link.getShortId())
+                        .shortLink(appConfig.getBaseUrl() + link.getShortId())
                         .shortId(link.getShortId())
                         .originalUrl(link.getOriginalUrl())
                         .clickCount(link.getClickCount())
