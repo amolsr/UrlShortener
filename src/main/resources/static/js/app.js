@@ -117,16 +117,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 a.addEventListener("click", async (e) => {
                     e.preventDefault();
                     try {
-                        const patchResponse = await fetch(`${apiBaseUrl}/links/increment-count/${shortId}`, {
+                        // Optimistically update the UI first for better user experience
+                        const currentCount = parseInt(clickCountP.textContent.match(/\d+/)[0]);
+                        clickCountP.textContent = `This link has been clicked ${currentCount + 1} times.`;
+                        
+                        // Navigate immediately for better performance
+                        window.location.href = a.href;
+                        
+                        // Track click asynchronously (fire and forget)
+                        fetch(`${apiBaseUrl}/links/increment-count/${shortId}`, {
                             method: "PATCH"
+                        }).catch(err => {
+                            console.error("Error tracking click count:", err);
+                            // Revert the optimistic update if tracking fails
+                            clickCountP.textContent = `This link has been clicked ${currentCount} times.`;
                         });
-                        if (patchResponse.ok) {
-                            const currentCount = parseInt(clickCountP.textContent.match(/\d+/)[0]);
-                            clickCountP.textContent = `This link has been clicked ${currentCount + 1} times.`;
-                            window.location.href = a.href;
-                        }
                     } catch (err) {
-                        console.error("Error incrementing click count:", err);
+                        console.error("Error handling click:", err);
                     }
                 });
 

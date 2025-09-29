@@ -127,12 +127,14 @@ public class LinkController {
             return ResponseEntity.badRequest().build();
         }
 
-        return linkService.getLinkByShortId(shortId)
-                .map(link -> {
-                    linkService.incrementClickCount(link);
-                    return ResponseEntity.ok().<Void>build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+        // Check if link exists first
+        if (linkService.getLinkByShortId(shortId).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Use async method for better performance
+        linkService.incrementClickCountAsync(shortId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/qr/{shortId}")

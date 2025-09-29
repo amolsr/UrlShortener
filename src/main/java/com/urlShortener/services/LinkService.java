@@ -22,5 +22,7 @@ public interface LinkService {
 
     void incrementClickCount(Link link);
 
+    java.util.concurrent.CompletableFuture<Void> incrementClickCountAsync(String shortId);
+
     void cacheShortenedLink(String shortId, String originalUrl, Duration ttl);
 }
