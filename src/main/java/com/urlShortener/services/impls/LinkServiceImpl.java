@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -124,6 +126,22 @@ public class LinkServiceImpl implements LinkService {
     public void incrementClickCount(Link link) {
         link.setClickCount(link.getClickCount() + 1);
         linkRepository.save(link);
+    }
+
+    @Override
+    @Async("clickTrackingExecutor")
+    public CompletableFuture<Void> incrementClickCountAsync(String shortId) {
+        try {
+            int updatedRows = linkRepository.incrementClickCountByShortId(shortId);
+            if (updatedRows == 0) {
+                // Log warning if no rows were updated (link might not exist)
+                System.out.println("Warning: No link found with shortId: " + shortId);
+            }
+        } catch (Exception e) {
+            // Log error but don't throw exception to avoid breaking the main flow
+            System.err.println("Error incrementing click count for shortId " + shortId + ": " + e.getMessage());
+        }
+        return CompletableFuture.completedFuture(null);
     }
 
     private String generateRandomShortId() {
