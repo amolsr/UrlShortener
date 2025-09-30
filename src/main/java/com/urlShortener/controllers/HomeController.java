@@ -22,8 +22,8 @@ public class HomeController {
         String originalUrl = linkService.getOriginalUrlByShortId(shortId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Link not found"));
 
-        // TODO: increment click count 
-        // linkService.incrementClickCount(link);
+        // Use async method for better performance
+        linkService.incrementClickCountAsync(shortId);
 
         return "redirect:" + originalUrl;
     }
